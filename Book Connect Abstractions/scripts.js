@@ -23,7 +23,7 @@ const elementsFromDOM = {
     dataListTitle: document.querySelector('[data-list-title]'),
     dataListSubtitle: document.querySelector('[data-list-subtitle]'),
     dataListDescricption: document.querySelector('[data-list-description]'),
-    dataSearchForm: document.querySelector('[data-search-form]')
+    dataSearchForm: document.querySelector('[data-search-form]'),
 }
 
 let page = 1;
@@ -54,7 +54,6 @@ function renderBooks (){
 
     elementsFromDOM.dataListItems.appendChild(starting)
 }
-
 renderBooks();
 
 function showGenre () {
@@ -73,7 +72,6 @@ function showGenre () {
 
     elementsFromDOM.dataSearchGenres.appendChild(genreHtml)
 }
-
 showGenre();
 
 function showAuthors () {
@@ -92,13 +90,14 @@ function showAuthors () {
 
     elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml)
 }
+showAuthors();
 
 
 function toggleTheme () {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    elementsFromDOM.dataSettingsTheme.value = 'night'
-    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+        elementsFromDOM.dataSettingsTheme.value = 'night'
+        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
     } else {
         elementsFromDOM.dataSettingsTheme.value = 'day'
         document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
@@ -114,28 +113,28 @@ elementsFromDOM.dataListButton.innerHTML = `
     <span>Show more</span>
     <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
 `
+function setupEventListeners() {
+    elementsFromDOM.dataSearchCancel.addEventListener('click', () => {
+        elementsFromDOM.dataSearchOverlay.open = false
+    })
 
-elementsFromDOM.dataSearchCancel.addEventListener('click', () => {
-    elementsFromDOM.dataSearchOverlay.open = false
-})
+    elementsFromDOM.dataSettingsCancel.addEventListener('click', () => {
+        elementsFromDOM.dataSettingsOverlay.open = false
+    })
 
-elementsFromDOM.dataSettingsCancel.addEventListener('click', () => {
-    elementsFromDOM.dataSettingsOverlay.open = false
-})
+    elementsFromDOM.dataHeaderSearch.addEventListener('click', () => {
+        elementsFromDOM.dataSearchOverlay.open = true 
+        elementsFromDOM.dataSearchTitle.focus()
+    })
 
-elementsFromDOM.dataHeaderSearch.addEventListener('click', () => {
-    elementsFromDOM.dataSearchOverlay.open = true 
-    elementsFromDOM.dataSearchTitle.focus()
-})
+    elementsFromDOM.dataHeaderSettings.addEventListener('click', () => {
+        elementsFromDOM.dataSettingsOverlay.open = true 
+    })
 
-elementsFromDOM.dataHeaderSettings.addEventListener('click', () => {
-    elementsFromDOM.dataSettingsOverlay.open = true 
-})
-
-elementsFromDOM.dataListClose.addEventListener('click', () => {
-    elementsFromDOM.dataListActive.open = false
-})
-
+    elementsFromDOM.dataListClose.addEventListener('click', () => {
+        elementsFromDOM.dataListActive.open = false
+    })
+}
 elementsFromDOM.dataSettingsForm.addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
