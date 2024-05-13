@@ -1,9 +1,5 @@
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 // @ts-check
-let page = 1;
-let matches = books
-
-const starting = document.createDocumentFragment()
 
 const elementsFromDOM = {
     dataListItems: document.querySelector('[data-list-items]'),
@@ -30,57 +26,73 @@ const elementsFromDOM = {
     dataSearchForm: document.querySelector('[data-search-form]')
 }
 
-for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    const element = document.createElement('button')
-    element.classList = 'preview'
-    element.setAttribute('data-preview', id)
+let page = 1;
+let matches = books
 
-    element.innerHTML = `
-        <img
-            class="preview__image"
-            src="${image}"
-        />
-        
-        <div class="preview__info">
-            <h3 class="preview__title">${title}</h3>
-            <div class="preview__author">${authors[author]}</div>
-        </div>
-    `
+function renderBooks (){
+    const starting = document.createDocumentFragment()
 
-    starting.appendChild(element)
+    for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
+        const element = document.createElement('button')
+        element.classList = 'preview'
+        element.setAttribute('data-preview', id)
+
+        element.innerHTML = `
+            <img
+                class="preview__image"
+                src="${image}"
+            />
+            
+            <div class="preview__info">
+                <h3 class="preview__title">${title}</h3>
+                <div class="preview__author">${authors[author]}</div>
+            </div>
+        `
+
+        starting.appendChild(element)
+    }
+
+    elementsFromDOM.dataListItems.appendChild(starting)
 }
 
-elementsFromDOM.dataListItems.appendChild(starting)
+renderBooks();
 
-const genreHtml = document.createDocumentFragment()
-const firstGenreElement = document.createElement('option')
-firstGenreElement.value = 'any'
-firstGenreElement.innerText = 'All Genres'
-genreHtml.appendChild(firstGenreElement)
+function showGenre () {
+    const genreHtml = document.createDocumentFragment()
+    const firstGenreElement = document.createElement('option')
+    firstGenreElement.value = 'any'
+    firstGenreElement.innerText = 'All Genres'
+    genreHtml.appendChild(firstGenreElement)
 
-for (const [id, name] of Object.entries(genres)) {
-    const element = document.createElement('option')
-    element.value = id
-    element.innerText = name
-    genreHtml.appendChild(element)
+    for (const [id, name] of Object.entries(genres)) {
+        const element = document.createElement('option')
+        element.value = id
+        element.innerText = name
+        genreHtml.appendChild(element)
+    }
+
+    elementsFromDOM.dataSearchGenres.appendChild(genreHtml)
 }
 
-elementsFromDOM.dataSearchGenres.appendChild(genreHtml)
+showGenre();
 
-const authorsHtml = document.createDocumentFragment()
-const firstAuthorElement = document.createElement('option')
-firstAuthorElement.value = 'any'
-firstAuthorElement.innerText = 'All Authors'
-authorsHtml.appendChild(firstAuthorElement)
+function showAuthors () {
+    const authorsHtml = document.createDocumentFragment()
+    const firstAuthorElement = document.createElement('option')
+    firstAuthorElement.value = 'any'
+    firstAuthorElement.innerText = 'All Authors'
+    authorsHtml.appendChild(firstAuthorElement)
 
-for (const [id, name] of Object.entries(authors)) {
-    const element = document.createElement('option')
-    element.value = id
-    element.innerText = name
-    authorsHtml.appendChild(element)
+    for (const [id, name] of Object.entries(authors)) {
+        const element = document.createElement('option')
+        element.value = id
+        element.innerText = name
+        authorsHtml.appendChild(element)
+    }
+
+    elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml)
 }
 
-elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml)
 
 function toggleTheme () {
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
