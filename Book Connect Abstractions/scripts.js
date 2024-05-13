@@ -82,15 +82,18 @@ for (const [id, name] of Object.entries(authors)) {
 
 elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml)
 
-if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+function toggleTheme () {
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     elementsFromDOM.dataSettingsTheme.value = 'night'
     document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
     document.documentElement.style.setProperty('--color-light', '10, 10, 20');
-} else {
-    elementsFromDOM.dataSettingsTheme.value = 'day'
-    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    } else {
+        elementsFromDOM.dataSettingsTheme.value = 'day'
+        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    }
 }
+
 
 elementsFromDOM.dataListButton.innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
 elementsFromDOM.dataListButton.disabled = (matches.length - (page * BOOKS_PER_PAGE)) > 0
