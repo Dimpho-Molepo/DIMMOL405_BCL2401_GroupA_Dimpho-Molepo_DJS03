@@ -238,3 +238,4 @@ function handleSettingsFormSubmit(event) {
     elementsFromDOM.dataSettingsOverlay.open = false
 }
 
+export { renderBooks, showGenre, showAuthors, toggleTheme, setupEventListeners, handleSearchFormSubmit, handleListButtonClick, handleListItemsClick, handleSettingsFormSubmit };
