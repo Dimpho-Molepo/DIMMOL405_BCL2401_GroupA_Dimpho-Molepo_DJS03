@@ -1,30 +1,7 @@
 import { books, authors, genres, BOOKS_PER_PAGE } from './data.js'
 // @ts-check
+import { getElement, elementsFromDOM } from './elements.js';
 
-const elementsFromDOM = {
-    dataListItems: document.querySelector('[data-list-items]'),
-    dataSearchGenres: document.querySelector('[data-search-genres]'),
-    dataSearchAuthors: document.querySelector('[data-search-authors]'),
-    dataListButton: document.querySelector('[data-list-button]'),
-    dataSearchCancel: document.querySelector('[data-search-cancel]'),
-    dataSettingsCancel: document.querySelector('[data-settings-cancel]'),
-    dataHeaderSearch: document.querySelector('[data-header-search]'),
-    dataSettingsTheme: document.querySelector('[data-settings-theme]'),
-    dataSearchOverlay: document.querySelector('[data-search-overlay]'),
-    dataSettingsOverlay: document.querySelector('[data-settings-overlay]'),
-    dataSearchTitle: document.querySelector('[data-search-title]'),
-    dataHeaderSettings: document.querySelector('[data-header-settings]'),
-    dataListClose: document.querySelector('[data-list-close]'),
-    dataListActive: document.querySelector('[data-list-active]'),
-    dataSettingsForm: document.querySelector('[data-settings-form]'),
-    dataListMessage: document.querySelector('[data-list-message]'),
-    dataListBlur: document.querySelector('[data-list-blur]'),
-    dataListImage: document.querySelector('[data-list-image]'),
-    dataListTitle: document.querySelector('[data-list-title]'),
-    dataListSubtitle: document.querySelector('[data-list-subtitle]'),
-    dataListDescricption: document.querySelector('[data-list-description]'),
-    dataSearchForm: document.querySelector('[data-search-form]'),
-}
 
 let page = 1;
 let matches = books
@@ -135,6 +112,8 @@ function setupEventListeners() {
         elementsFromDOM.dataListActive.open = false
     })
 }
+setupEventListeners()
+
 elementsFromDOM.dataSettingsForm.addEventListener('submit', (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -147,7 +126,7 @@ elementsFromDOM.dataSettingsForm.addEventListener('submit', (event) => {
         document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
         document.documentElement.style.setProperty('--color-light', '255, 255, 255');
     }
-    
+
     elementsFromDOM.dataSettingsOverlay.open = false
 })
 
