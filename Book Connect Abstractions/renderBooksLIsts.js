@@ -165,3 +165,76 @@ function handleSearchFormSubmit(event) {
     window.scrollTo({top: 0, behavior: 'smooth'});
     elementsFromDOM.dataSearchOverlay.open = false
 }
+
+function handleListButtonClick() {
+    const fragment = document.createDocumentFragment()
+    
+    for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
+        const element = document.createElement('button')
+        element.classList = 'preview'
+        element.setAttribute('data-preview', id)
+    
+        element.innerHTML = `
+            <img
+                class="preview__image"
+                src="${image}"
+            />
+            
+            <div class="preview__info">
+                <h3 class="preview__title">${title}</h3>
+                <div class="preview__author">${authors[author]}</div>
+            </div>
+        `
+
+        fragment.appendChild(element)
+    }
+
+    elementsFromDOM.dataListItems.appendChild(fragment)
+    page += 1
+}
+
+function handleListItemsClick(event) {
+    const pathArray = Array.from(event.path || event.composedPath())
+    let active = null
+
+    for (const node of pathArray) {
+        if (active) break
+
+        if (node?.dataset?.preview) {
+            let result = null
+    
+            for (const singleBook of books) {
+                if (result) break;
+                if (singleBook.id === node?.dataset?.preview) result = singleBook
+            } 
+        
+            active = result 
+        }
+    }
+    
+    if (active) {
+        elementsFromDOM.dataListActive.open = true
+        elementsFromDOM.dataListBlur.src = active.image
+        elementsFromDOM.dataListImage.src = active.image
+        elementsFromDOM.dataListTitle.innerText = active.title
+        elementsFromDOM.dataListSubtitle.innerText = `${authors[active.author]} (${new Date(active.published).getFullYear()})`
+        elementsFromDOM.dataListDescricption.innerText = active.description
+    }
+}
+
+function handleSettingsFormSubmit(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const { theme } = Object.fromEntries(formData)
+    
+    if (theme === 'night') {
+        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    } else {
+        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    }
+
+    elementsFromDOM.dataSettingsOverlay.open = false
+}
+
