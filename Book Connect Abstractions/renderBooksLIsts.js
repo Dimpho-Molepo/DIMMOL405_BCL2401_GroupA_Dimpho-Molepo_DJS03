@@ -4,6 +4,26 @@ import { elementsFromDOM } from './elements.js';
 let page = 1;
 let matches = books;
 
+function createPreviewButton({ author, id, image, title }) {
+
+    const element = document.createElement('button');
+    element.classList = 'preview';
+    element.setAttribute('data-preview', id);
+
+    element.innerHTML = `
+        <img
+            class="preview__image"
+            src="${image}"
+        />
+                
+        <div class="preview__info">
+            <h3 class="preview__title">${title}</h3>
+            <div class="preview__author">${authors[author]}</div>
+        </div>
+    `;
+    return element
+}
+
 /** Render books on the page with book image, title and author name.
  * 
  * @returns {void} This function does not return a value.
@@ -12,22 +32,7 @@ function renderBooks() {
     const starting = document.createDocumentFragment();
 
     for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-        const element = document.createElement('button');
-        element.classList = 'preview';
-        element.setAttribute('data-preview', id);
-
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-                
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `;
-
+        const element = createPreviewButton({ author, id, image, title });
         starting.appendChild(element);
     }
 
@@ -61,21 +66,21 @@ function showGenre() {
  * 
  * @returns {void} This function does not return a value.
  */
-function showAuthors() {
-  const authorsHtml = document.createDocumentFragment();
-  const firstAuthorElement = document.createElement('option');
-  firstAuthorElement.value = 'any';
-  firstAuthorElement.innerText = 'All Authors';
-  authorsHtml.appendChild(firstAuthorElement);
+function showAuthors() {  
+    const authorsHtml = document.createDocumentFragment();
+    const firstAuthorElement = document.createElement('option');
+    firstAuthorElement.value = 'any';
+    firstAuthorElement.innerText = 'All Authors';
+    authorsHtml.appendChild(firstAuthorElement);
 
-  for (const [id, name] of Object.entries(authors)) {
-    const element = document.createElement('option');
-    element.value = id;
-    element.innerText = name;
-    authorsHtml.appendChild(element);
-  }
+    for (const [id, name] of Object.entries(authors)) {
+        const element = document.createElement('option');
+        element.value = id;
+        element.innerText = name;
+        authorsHtml.appendChild(element);
+    }
 
-  elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml);
+    elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml);
 }
 
 /** Toggle between the dark and light theme for the page
@@ -83,15 +88,15 @@ function showAuthors() {
  * @returns {void} This function does not return a value.
  */
 function toggleTheme() {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    elementsFromDOM.dataSettingsTheme.value = 'night';
-    document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
-    document.documentElement.style.setProperty('--color-light', '10, 10, 20');
-  } else {
-    elementsFromDOM.dataSettingsTheme.value = 'day';
-    document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
-    document.documentElement.style.setProperty('--color-light', '255, 255, 255');
-  }
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        elementsFromDOM.dataSettingsTheme.value = 'night';
+        document.documentElement.style.setProperty('--color-dark', '255, 255, 255');
+        document.documentElement.style.setProperty('--color-light', '10, 10, 20');
+    } else {
+        elementsFromDOM.dataSettingsTheme.value = 'day';
+        document.documentElement.style.setProperty('--color-dark', '10, 10, 20');
+        document.documentElement.style.setProperty('--color-light', '255, 255, 255');
+    }
 }
 
 /** Setup the several event listeners for elements in the DOM
@@ -162,22 +167,7 @@ function handleSearchFormSubmit(event) {
     const newItems = document.createDocumentFragment()
 
     for (const { author, id, image, title } of result.slice(0, BOOKS_PER_PAGE)) {
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-    
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-
+        const element = createPreviewButton({ author, id, image, title });
         newItems.appendChild(element)
     }
 
@@ -201,22 +191,7 @@ function handleListButtonClick() {
     const fragment = document.createDocumentFragment()
     
     for (const { author, id, image, title } of matches.slice(page * BOOKS_PER_PAGE, (page + 1) * BOOKS_PER_PAGE)) {
-        const element = document.createElement('button')
-        element.classList = 'preview'
-        element.setAttribute('data-preview', id)
-    
-        element.innerHTML = `
-            <img
-                class="preview__image"
-                src="${image}"
-            />
-            
-            <div class="preview__info">
-                <h3 class="preview__title">${title}</h3>
-                <div class="preview__author">${authors[author]}</div>
-            </div>
-        `
-
+        const element = createPreviewButton({ author, id, image, title });
         fragment.appendChild(element)
     }
 
