@@ -4,32 +4,41 @@ import { elementsFromDOM } from './elements.js';
 let page = 1;
 let matches = books;
 
+/** Render books on the page with book image, title and author name.
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function renderBooks() {
-  const starting = document.createDocumentFragment();
+    const starting = document.createDocumentFragment();
 
-  for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
-    const element = document.createElement('button');
-    element.classList = 'preview';
-    element.setAttribute('data-preview', id);
+    for (const { author, id, image, title } of matches.slice(0, BOOKS_PER_PAGE)) {
+        const element = document.createElement('button');
+        element.classList = 'preview';
+        element.setAttribute('data-preview', id);
 
-    element.innerHTML = `
+        element.innerHTML = `
             <img
                 class="preview__image"
                 src="${image}"
             />
-            
+                
             <div class="preview__info">
                 <h3 class="preview__title">${title}</h3>
                 <div class="preview__author">${authors[author]}</div>
             </div>
         `;
 
-    starting.appendChild(element);
-  }
+        starting.appendChild(element);
+    }
 
   elementsFromDOM.dataListItems.appendChild(starting);
 }
 
+/** Creates a options for each genre in the genres object, 
+ * and appends it to the DOM.
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function showGenre() {
   const genreHtml = document.createDocumentFragment();
   const firstGenreElement = document.createElement('option');
@@ -47,6 +56,11 @@ function showGenre() {
   elementsFromDOM.dataSearchGenres.appendChild(genreHtml);
 }
 
+/** Creates a options for each author in the authors object, 
+ * and appends it to the DOM
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function showAuthors() {
   const authorsHtml = document.createDocumentFragment();
   const firstAuthorElement = document.createElement('option');
@@ -64,6 +78,10 @@ function showAuthors() {
   elementsFromDOM.dataSearchAuthors.appendChild(authorsHtml);
 }
 
+/** Toggle between the dark and light theme for the page
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function toggleTheme() {
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     elementsFromDOM.dataSettingsTheme.value = 'night';
@@ -76,6 +94,10 @@ function toggleTheme() {
   }
 }
 
+/** Setup the several event listeners for elements in the DOM
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function setupEventListeners() {
     elementsFromDOM.dataSearchCancel.addEventListener('click', () => {
         elementsFromDOM.dataSearchOverlay.open = false
@@ -99,6 +121,11 @@ function setupEventListeners() {
     })
 }
 
+/** Handles the submission of the search form and gets the relevant searches displayed on the page 
+ * 
+ * @param {Event} event - The form submission event object.
+ * @returns {void} This function does not return a value.
+ */
 function handleSearchFormSubmit(event) {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -166,6 +193,10 @@ function handleSearchFormSubmit(event) {
     elementsFromDOM.dataSearchOverlay.open = false
 }
 
+/** Handles the click event for the list button and displays the corresponding list items.
+ * 
+ * @returns {void} This function does not return a value.
+ */
 function handleListButtonClick() {
     const fragment = document.createDocumentFragment()
     
@@ -193,6 +224,11 @@ function handleListButtonClick() {
     page += 1
 }
 
+/** Handles the click event for the book list items and displays the book's info
+ * 
+ * @param {Event} event - The form submission event object.
+ * @returns {void} This function does not return a value. event 
+ */
 function handleListItemsClick(event) {
     const pathArray = Array.from(event.path || event.composedPath())
     let active = null
@@ -222,6 +258,11 @@ function handleListItemsClick(event) {
     }
 }
 
+/** Handles the form submission for the settings form and updates the theme accordingly.
+ *
+ * @param {Event} event - The form submission event object.
+ * @returns {void} This function does not return a value.
+ */
 function handleSettingsFormSubmit(event) {
     event.preventDefault()
     const formData = new FormData(event.target)
