@@ -1,3 +1,8 @@
+/** Returns the first element that matches the given selector.
+ *
+ * @param {string} selector - The CSS selector to use when searching for the element.
+ * @returns {Element|null} The first element that matches the selector, or null if no match is found.
+ */
 export function getElement(selector) {
   return document.querySelector(selector);
 }
