@@ -1,45 +1,58 @@
 import {
   renderBooks,
-  showGenre,
-  showAuthors,
-  toggleTheme,
-  setupEventListeners,
-  handleSearchFormSubmit,
   handleListButtonClick,
   handleListItemsClick,
-  handleSettingsFormSubmit,
+  showMoreBooksButton,
 } from "./renderBooksLIsts.js";
-import { books, BOOKS_PER_PAGE } from './data.js'
-import { elementsFromDOM } from './elements.js';
+import { elementsFromDOM } from "./elements.js";
+import { handleSearchFormSubmit } from "./searchForm.js";
+import { toggleTheme, handleSettingsFormSubmit } from "./settingsFormSubmit.js";
 
 renderBooks();
-showGenre();
-showAuthors();
 toggleTheme();
 setupEventListeners();
-let page = 1;
-let matches = books;
 
-elementsFromDOM.dataListButton.innerText = `Show more (${books.length - BOOKS_PER_PAGE})`
-elementsFromDOM.dataListButton.disabled = (matches.length - (page * BOOKS_PER_PAGE)) > 0
+/** Setup the several event listeners for elements in the DOM
+ *
+ * @returns {void} This function does not return a value.
+ */
+function setupEventListeners() {
+  elementsFromDOM.dataSearchCancel.addEventListener("click", () => {
+    elementsFromDOM.dataSearchOverlay.open = false;
+  });
 
-elementsFromDOM.dataListButton.innerHTML = `
-    <span>Show more</span>
-    <span class="list__remaining"> (${(matches.length - (page * BOOKS_PER_PAGE)) > 0 ? (matches.length - (page * BOOKS_PER_PAGE)) : 0})</span>
-`
+  elementsFromDOM.dataSettingsCancel.addEventListener("click", () => {
+    elementsFromDOM.dataSettingsOverlay.open = false;
+  });
 
-elementsFromDOM.dataSettingsForm.addEventListener('submit', (event) => {
-  handleSettingsFormSubmit(event)
-})
+  elementsFromDOM.dataHeaderSearch.addEventListener("click", () => {
+    elementsFromDOM.dataSearchOverlay.open = true;
+    elementsFromDOM.dataSearchTitle.focus();
+  });
 
-elementsFromDOM.dataSearchForm.addEventListener('submit', (event) => {
-  handleSearchFormSubmit(event)
-})
+  elementsFromDOM.dataHeaderSettings.addEventListener("click", () => {
+    elementsFromDOM.dataSettingsOverlay.open = true;
+  });
 
-elementsFromDOM.dataListButton.addEventListener('click', () => {
-    handleListButtonClick()
-})
+  elementsFromDOM.dataListClose.addEventListener("click", () => {
+    elementsFromDOM.dataListActive.open = false;
+  });
 
-elementsFromDOM.dataListItems.addEventListener('click', (event) => {
-    handleListItemsClick(event)
-})
+  elementsFromDOM.dataSettingsForm.addEventListener("submit", (event) => {
+    handleSettingsFormSubmit(event);
+  });
+
+  elementsFromDOM.dataSearchForm.addEventListener("submit", (event) => {
+    handleSearchFormSubmit(event);
+  });
+
+  showMoreBooksButton();
+
+  elementsFromDOM.dataListButton.addEventListener("click", () => {
+    handleListButtonClick();
+  });
+
+  elementsFromDOM.dataListItems.addEventListener("click", (event) => {
+    handleListItemsClick(event);
+  });
+}
