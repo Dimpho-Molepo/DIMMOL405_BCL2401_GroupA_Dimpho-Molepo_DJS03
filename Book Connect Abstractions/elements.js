@@ -6,7 +6,9 @@
 export function getElement(selector) {
   return document.querySelector(selector);
 }
-
+/**
+ * @type {object} elementsFromDOM - use the getElement to retrieve DOM elements
+ */
 export const elementsFromDOM = {
   dataListItems: getElement("[data-list-items]"),
   dataListMessage: getElement("[data-list-message]"),
