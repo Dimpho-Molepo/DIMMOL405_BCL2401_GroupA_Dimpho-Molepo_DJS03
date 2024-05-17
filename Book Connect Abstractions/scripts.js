@@ -2,8 +2,7 @@ import {
   renderBooks,
   handleListButtonClick,
   handleListItemsClick,
-  showMoreBooksButton,
-} from "./renderBooksLIsts.js";
+} from "./renderBooksLists.js";
 import { elementsFromDOM } from "./elements.js";
 import { handleSearchFormSubmit } from "./searchForm.js";
 import { toggleTheme, handleSettingsFormSubmit } from "./settingsFormSubmit.js";
@@ -45,8 +44,6 @@ function setupEventListeners() {
   elementsFromDOM.dataSearchForm.addEventListener("submit", (event) => {
     handleSearchFormSubmit(event);
   });
-
-  showMoreBooksButton();
 
   elementsFromDOM.dataListButton.addEventListener("click", () => {
     handleListButtonClick();
