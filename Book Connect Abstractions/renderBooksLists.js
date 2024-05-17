@@ -1,5 +1,6 @@
 import { books, authors, BOOKS_PER_PAGE } from "./data.js";
 import { elementsFromDOM } from "./elements.js";
+import { showMoreBooksButton } from "./showMoreBooks.js";
 
 let page = 1;
 let matches = books;
@@ -45,6 +46,7 @@ function renderBooks() {
     }
 
     elementsFromDOM.dataListItems.appendChild(starting);
+    
 }
 
 /** Handles the click event for the list button and displays the corresponding list items.
@@ -54,7 +56,7 @@ function renderBooks() {
 function handleListButtonClick() {
     renderBooks();
     page += 1;
-    showMoreBooksButton();
+    showMoreBooksButton(page, matches);
 }
 
 /** Handles the click event for the book list items and displays the book's info
@@ -91,28 +93,9 @@ function handleListItemsClick(event) {
     }
 }
 
-/** This function display the remaining books in list button
- *
- * @returns {void} This function does not return a value.
- */
-function showMoreBooksButton() {
-    elementsFromDOM.dataListButton.innerText = `Show more (${ matches.length - page * BOOKS_PER_PAGE})`;
-    elementsFromDOM.dataListButton.disabled = matches.length - page * BOOKS_PER_PAGE <= 0;
-
-    elementsFromDOM.dataListButton.innerHTML = `
-        <span>Show more</span>
-        <span class="list__remaining"> (${
-        matches.length - page * BOOKS_PER_PAGE > 0
-            ? matches.length - page * BOOKS_PER_PAGE
-            : 0
-        })</span>
-    `;
-}
-
 export {
   renderBooks,
   handleListButtonClick,
   handleListItemsClick,
-  showMoreBooksButton,
   createPreviewButton,
 };
