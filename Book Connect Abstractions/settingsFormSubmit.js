@@ -24,7 +24,7 @@ function setTheme(theme) {
   document.documentElement.style.setProperty('--color-light', themeSettings[theme].light);
 }
 
-/** Toggle between the dark and light theme for the page
+/** Toggle between the night and day theme for the page
  * 
  * @returns {void} This function does not return a value.
  */
