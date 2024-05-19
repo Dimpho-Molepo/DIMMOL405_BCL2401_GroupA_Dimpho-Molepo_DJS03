@@ -1,8 +1,4 @@
-import { books, authors, genres } from "./data.js";
 import { elementsFromDOM } from "./elements.js";
-import { showMoreBooksButton, renderBooks } from "./renderBooksLists.js";
-
-let matches = books;
 
 /** Creates options in the the search form.
  *
@@ -10,8 +6,8 @@ let matches = books;
  * @param {HTMLElement} elementDOM
  * @param {string} optionString
  * @returns {void} This function does not return a value.
- */
-function createOptions(authorOrGenreArray, optionString, elementDOM) {
+*/
+export function createOptions(authorOrGenreArray, optionString, elementDOM) {
   const fragment = document.createDocumentFragment();
   const optionElement = document.createElement("option");
   optionElement.value = "any";
@@ -28,24 +24,34 @@ function createOptions(authorOrGenreArray, optionString, elementDOM) {
   elementDOM.appendChild(fragment);
 }
 
-createOptions(authors, "All Authors", elementsFromDOM.dataSearchAuthors);
-createOptions(genres, "All Genres", elementsFromDOM.dataSearchGenres);
-
-function filterBooks(bookFilter) {
+/** Filters an array of books based on the provided title, genre and author.
+ *
+ * @param {array} books - The array of books to be filtered.
+ * @param {object} filters - The filter criteria for books.
+ * @param {string} filters.genre - The genre to filter by.
+ * @param {string} filters.title - The title to filter by.
+ * @param {string} filters.author - The author to filter by.
+ * @returns {array} An array of filtered books.
+*/
+export function filterBooks(books, filters) {
   const result = [];
 
   for (const book of books) {
-    let genreMatch = bookFilter.genre === "any";
+    let genreMatch = filters.genre === "any";
 
     for (const singleGenre of book.genres) {
       if (genreMatch) break;
-      if (singleGenre === bookFilter.genre) {
+      if (singleGenre === filters.genre) {
         genreMatch = true;
       }
     }
 
-    if ((bookFilter.title.trim() === "" || book.title.toLowerCase().includes(bookFilter.title.toLowerCase())) && 
-        (bookFilter.author === "any" || book.author === bookFilter.author) &&genreMatch) {
+    if (
+      (filters.title.trim() === "" ||
+        book.title.toLowerCase().includes(filters.title.toLowerCase())) &&
+      (filters.author === "any" || book.author === filters.author) &&
+      genreMatch
+    ) {
       result.push(book);
     }
   }
@@ -53,28 +59,16 @@ function filterBooks(bookFilter) {
   return result;
 }
 
-/** Handles the submission of the search form and gets the relevant searches displayed on the page
+/**
+ * Checks the length of the result and updates the data list message accordingly.
  *
- * @param {Event} event - The form submission event object.
+ * @param {array} result - The array of filtered books.
  * @returns {void} This function does not return a value.
 */
-export function handleSearchFormSubmit(event) {
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const filters = Object.fromEntries(formData);
-
-  matches = filterBooks(filters);
-
-  if (matches.length < 1) {
-    elementsFromDOM.dataListMessage.classList.add("list__message_show");
+export function checkResultLength(result) {
+  if (result.length < 1) {
+    elementsFromDOM.dataListMessage.classList.add('list__message_show');
   } else {
-    elementsFromDOM.dataListMessage.classList.remove("list__message_show");
+    elementsFromDOM.dataListMessage.classList.remove('list__message_show');
   }
-
-  elementsFromDOM.dataListItems.innerHTML = "";
-  renderBooks();
-
-  showMoreBooksButton(page, matches);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  elementsFromDOM.dataSearchOverlay.open = false;
 }
